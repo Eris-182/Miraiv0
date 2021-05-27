@@ -28,7 +28,7 @@ module.exports.run = ({ event, api, args }) => {
     const { readFileSync, createReadStream, createWriteStream, unlinkSync } = require("fs-extra");
     const request = require("request");
 
-    let animeData = JSON.parse(readFileSync(__dirname + "/cache/anime.json")).sfw;
+    let animeData = JSON.parse(readFileSync(__dirname + "/cache/hentai.json")).sfw;
     if (!animeData.hasOwnProperty(args[0])) {
         let list = [];
         Object.keys(animeData).forEach(endpoint => list.push(endpoint));

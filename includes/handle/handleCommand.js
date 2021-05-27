@@ -14,6 +14,7 @@ module.exports = function({ api, global, client, models, Users, Threads, Currenc
 		const threadSetting = client.threadSetting.get(parseInt(threadID)) || {};
 		const prefixRegex = new RegExp(`^(<@!?${senderID}>|${escapeRegex((threadSetting.hasOwnProperty("PREFIX")) ? threadSetting.PREFIX : PREFIX )})\\s*`);
 		if (!prefixRegex.test(contentMessage)) return;
+    
 
 		//////////////////////////////////////////
 		//=========Get command user use=========//
@@ -73,6 +74,7 @@ module.exports = function({ api, global, client, models, Users, Threads, Currenc
 			const expirationTime = timestamps.get(senderID) + cooldownAmount;
 			if (dateNow < expirationTime) return api.setMessageReaction('⏱', event.messageID, (err) => (err) ? logger('Đã có lỗi xảy ra khi thực thi setMessageReaction', 2) : '', true);
 		}
+    
 
 		///////////////////////////////////
 		//========= Run command =========//

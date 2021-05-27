@@ -15,9 +15,11 @@ module.exports.run = async ({ api, event, Users, args }) => {
       const fs = require('fs-extra');
       let name = (await Users.getInfo(senderID)).name;
       const mentions = Object.keys(event.mentions);
+      const x = (await Users.getInfo(senderID)).gender;
+      const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
       const tag = args.join(" ");
       if (mentions == 0)
-      return api.sendMessage("Ồ mày tự liếm lồn mày được cũng hay đó nha.", threadID, messageID);
+      return api.sendMessage(`Ý hí hí ${Sex} thật là biến thái quá đi hà`, threadID, messageID);
         var gif = [
         "https://25.media.tumblr.com/ca6a46c63ad37f6e28ce7d12deb43afe/tumblr_mt3ws805jo1r86u7yo1_500.gif",
         "https://37.media.tumblr.com/8b184cb3c1bcfaa998015301d1e60f37/tumblr_mik3jbFos01rg4rvvo1_500.gif",

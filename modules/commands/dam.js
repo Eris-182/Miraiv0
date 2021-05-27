@@ -15,9 +15,11 @@ module.exports.run = async ({ api, event, Users, args }) => {
       const fs = require('fs-extra');
       let name = (await Users.getInfo(senderID)).name;
       const mentions = Object.keys(event.mentions);
+      const x = (await Users.getInfo(senderID)).gender;
+      const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
       const tag = args.join(" ");
       if (mentions == 0)
-      return api.sendMessage("Tag một người vào nha bạn.", threadID, messageID);
+      return api.sendMessage(`Oh! ${Sex} cần phải tag thêm một người vào nha`, threadID, messageID);
       var gif = [
         "https://i.pinimg.com/originals/f3/ec/8c/f3ec8c256cb22279c14bfdc48c92e5ab.gif",
         "https://media1.tenor.com/images/31686440e805309d34e94219e4bedac1/tenor.gif?itemid=4790446",

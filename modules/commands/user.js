@@ -54,11 +54,28 @@ module.exports.handleReaction = async ({ event, api, Users, client, handleReacti
 }
 
 module.exports.run = async ({ event, api, args, Users, client }) => {
-	let content = args.slice(1, args.length);
+	let mentions = Object.keys(event.mentions);
+  let content= args.slice(1, args.length);
 	switch (args[0]) {
 		case "ban": {
-			if (content.length == 0) return api.sendMessage("Bạn cần phải nhập ID người dùng cần ban!", event.threadID);
-			for (let idUser of content) {
+			if (!mentions) return api.sendMessage("Bạn cần phải nhập ID người dùng cần ban!", event.threadID);
+			for (let idUser of mentions) {
+				idUser = parseInt(idUser);
+				if (isNaN(idUser)) return api.sendMessage(`[${idUser}] không phải là IDUser!`, event.threadID);
+				let dataUser = (await Users.getData(idUser.toString()));
+				if (!dataUser) return api.sendMessage(`[${idUser}] người dùng không tồn tại trong database!`, event.threadID);
+				if (dataUser.banned) return api.sendMessage(`[${idUser}] Người dùng đã bị ban từ trước`, event.threadID);
+				return api.sendMessage(`[${idUser}] Bạn muốn ban người dùng này ?\n\nHãy reaction vào tin nhắn này để ban!`, event.threadID, (error, info) => {
+					client.handleReaction.push({
+						name: this.config.name,
+						messageID: info.messageID,
+						author: event.senderID,
+						type: "ban",
+						target: idUser
+					});
+				})
+			}
+      for (let idUser of content) {
 				idUser = parseInt(idUser);
 				if (isNaN(idUser)) return api.sendMessage(`[${idUser}] không phải là IDUser!`, event.threadID);
 				let dataUser = (await Users.getData(idUser.toString()));
@@ -78,6 +95,22 @@ module.exports.run = async ({ event, api, args, Users, client }) => {
 		}
 		case "unban": {
 			if (content.length == 0) return api.sendMessage("Bạn cần phải nhập ID thread cần ban!", event.threadID);
+      for (let idUser of mentions) {
+				idUser = parseInt(idUser);
+				if (isNaN(idUser)) return api.sendMessage(`[${idUser}] không phải là ID người dùng!`, event.threadID);
+				let dataUser = (await Users.getData(idUser.toString()));
+				if (!dataUser) return api.sendMessage(`[${idUser}] người dùng không tồn tại trong database!`, event.threadID);
+				if (!dataUser.banned) return api.sendMessage(`[${idUser}] người dùng không bị ban từ trước`, event.threadID);
+				return api.sendMessage(`[${idUser}] Bạn muốn unban người dùng này ?\n\nHãy reaction vào tin nhắn này để ban!`, event.threadID, (error, info) => {
+					client.handleReaction.push({
+						name: this.config.name,
+						messageID: info.messageID,
+						author: event.senderID,
+						type: "unban",
+						target: idUser
+					});
+				})
+			}
 			for (let idUser of content) {
 				idUser = parseInt(idUser);
 				if (isNaN(idUser)) return api.sendMessage(`[${idUser}] không phải là ID người dùng!`, event.threadID);
@@ -112,6 +145,22 @@ module.exports.run = async ({ event, api, args, Users, client }) => {
 			(matchUsers.length > 0) ? api.sendMessage(`Đây là kết quả phù hợp: \n${a}`, event.threadID) : api.sendMessage("Không tìm thấy kết quả dựa vào tìm kiếm của bạn!", event.threadID);
 			break;
 		}
+    case "list": {
+      var list = client.allUser || [];
+      var listuserbanned = [];
+      for (var iduser of list) {
+      const banned = (await Users.getData(iduser)).banned;
+      if (banned == 1) {
+        listuserbanned.push({id: iduser});
+      }
+     }
+    var msg = "";
+    for (let i = 0; i < listuserbanned.length; i++) {
+      const name = (await Users.getData(listuserbanned[i].id)).name;
+      msg += `${i+1}. Name: ${name} ID: ${listuserbanned[i].id}\n`;
+    }
+    msg == "" ? api.sendMessage("Hiện tại không có user nào bị ban", event.threadID, event.messageID) : api.sendMessage("Những user đã bị ban khỏi hệ thống bot gồm:\n" + msg, event.threadID, event.messageID);
+   }
 		default:
 			break;
 	}

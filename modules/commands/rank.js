@@ -155,7 +155,7 @@ module.exports.run = async ({ event, api, args, Currencies, Users }) => {
 		const point = await this.getInfo(event.senderID, Currencies);
 		const timeStart = Date.now();
 		const pathRankCard = await this.makeRankCard({ id: event.senderID, name, rank, ...point })
-		return api.sendMessage({body: `${Date.now() - timeStart}`, attachment: fs.createReadStream(pathRankCard, {'highWaterMark': 128 * 1024}) }, event.threadID, () => fs.unlinkSync(pathRankCard), event.messageID);
+		return api.sendMessage({attachment: fs.createReadStream(pathRankCard, {'highWaterMark': 128 * 1024}) }, event.threadID, (err, info) => {fs.unlinkSync(pathRankCard);setTimeout(() => api.unsendMessage(info.messageID), 10000)}, event.messageID);
 	}
 	if (mention.length == 1) {
 		const rank = dataAll.findIndex(item => parseInt(item.userID) == parseInt(mention[0])) + 1;
@@ -163,7 +163,7 @@ module.exports.run = async ({ event, api, args, Currencies, Users }) => {
 		if (rank == 0) return api.sendMessage("Bạn hiện không có trong cơ sở dữ liệu nên không thể thấy thứ hạng của mình, vui lòng thử lại sau 5 giây.", event.threadID, event.messageID);
 		const point = await this.getInfo(mention[0], Currencies);
 		const pathRankCard = await this.makeRankCard({ id: mention[0], name, rank, ...point })
-		return api.sendMessage({ attachment: fs.createReadStream(pathRankCard) }, event.threadID, () => fs.unlinkSync(pathRankCard), event.messageID);
+		return api.sendMessage({ attachment: fs.createReadStream(pathRankCard) }, event.threadID, (err, info) => {fs.unlinkSync(pathRankCard);setTimeout(() => api.unsendMessage(info.messageID), 10000)}, event.messageID);
 	}
 	if (mention.length > 1) {
 		for (const userID of mention) {
@@ -172,7 +172,7 @@ module.exports.run = async ({ event, api, args, Currencies, Users }) => {
 			if (rank == 0) return api.sendMessage("Bạn hiện không có trong cơ sở dữ liệu nên không thể thấy thứ hạng của mình, vui lòng thử lại sau 5 giây.", event.threadID, event.messageID);
 			const point = await this.getInfo(userID, Currencies);
 			const pathRankCard = await this.makeRankCard({ id: userID, name, rank, ...point })
-			return api.sendMessage({ attachment: fs.createReadStream(pathRankCard) }, event.threadID, () => fs.unlinkSync(pathRankCard), event.messageID);
+			return api.sendMessage({ attachment: fs.createReadStream(pathRankCard) }, event.threadID, (err, info) => {fs.unlinkSync(pathRankCard);setTimeout(() => api.unsendMessage(info.messageID), 10000)}, event.messageID);
 		}
 	}
 }

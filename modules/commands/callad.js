@@ -21,7 +21,7 @@ module.exports.run = async function({ api, event, args, Currencies, utils, Users
     let data = (await Users.getData(senderID));
     let thread = (await Threads.getData(threadID));
     var time = moment.tz('Asia/Ho_Chi_Minh').format('HH:mm:ss || DD/MM/YYYY');
-    for (var id of global.settings.ADMINBOT) {
+    for (var id of global.config.ADMINBOT) {
         api.sendMessage(`=== 𝑹𝒆𝒑𝒐𝒓𝒕 ===\n\nTIME: ${time}\nName: ${data.name}\nUID: ${senderID}\nNhóm: ${thread.name}\nThreadID: ${event.threadID}\nNhắn : ${args.join(" ")}`,id, async (err, messageInfo) => {
                 client.handleReply.push({ 
                     name: this.config.name,

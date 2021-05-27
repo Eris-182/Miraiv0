@@ -47,7 +47,7 @@ module.exports.run = async function({ api, event, args }) {
 	let pathImg = __dirname + '/cache/trum.png';
 	var text = args.join(" ");
 	if (!text) return api.sendMessage("Nhập nội dung cần tạo", threadID, messageID);
-	let getTrum = (await axios.get(`https://imgur.com/5kZjo1t.png`, { responseType: 'arraybuffer' })).data;
+	let getTrum = (await axios.get(`https://i.imgur.com/zg6Lntv.png`, { responseType: 'arraybuffer' })).data;
 	fs.writeFileSync(pathImg, Buffer.from(getTrum, 'utf-8'));
 	let baseImage = await loadImage(pathImg);
 	let canvas = createCanvas(baseImage.width, baseImage.height);

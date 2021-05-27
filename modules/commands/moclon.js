@@ -15,15 +15,16 @@ module.exports.run = async ({ api, event, Users, args }) => {
       const fs = require('fs-extra');
       let name = (await Users.getInfo(senderID)).name;
       const mentions = Object.keys(event.mentions);
-      const vitim = (await Users.getInfo(mentions)).name;
+      const x = (await Users.getInfo(senderID)).gender;
+      const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
+      const tag = args.join(' ');
       if (mentions == 0)
-      return api.sendMessage("Cũng đang móc lồn luôn à? Sướng thế.", threadID, messageID);
+      return api.sendMessage(`Oh! Hông được đâu ${Sex} phải tag thêm người nữa cơ`, threadID, messageID);
       var gif = [
             "https://i.imgur.com/eYTv0zM.gif",
             "https://i.imgur.com/j3346Co.gif",
             "https://i.imgur.com/UGKT6tS.gif",
             "https://i.imgur.com/48vyKf3.gif",
-            "https://i.imgur.com/Ijzo06s.gif",
             "https://i.imgur.com/9blwD2j.gif",
             "https://i.imgur.com/03Yu6Lq.gif",
             "https://i.imgur.com/cIWBos5.gif",
@@ -54,12 +55,20 @@ module.exports.run = async ({ api, event, Users, args }) => {
             "https://i.imgur.com/rHJmx9R.gif",
             "https://i.imgur.com/yhcn6da.gif"
           ];
+          const randomGif = gif[Math.floor(Math.random() * gif.length)];
+          let text = [
+            "nước lồn chảy quá trời",
+            "hai mép lồn sưng múp",
+            "nước ướt cả quần",
+            "rên ư ư"
+          ];
+          const randomText = text[Math.floor(Math.random() * text.length)];
           let callback = function() {
           api.sendMessage({
-                body: vitim + ", đang móc bím! Trời ơi bím to quá trời",
-                mentions: [{tag: mentions,id: Object.keys(event.mentions)[0]}],
+              body: `${tag} đang móc bím ${randomText}`,
+              mentions: [{tag: tag,id: Object.keys(event.mentions)[0]}],
               attachment: fs.createReadStream(__dirname + '/cache/moclon.gif')},
               threadID,(err, info) => {fs.unlinkSync(__dirname + '/cache/moclon.gif');setTimeout(() => api.unsendMessage(info.messageID), 10000)}, messageID);
           };
-         request(gif[Math.floor(Math.random() * gif.length)]).pipe(fs.createWriteStream(__dirname + '/cache/moclon.gif')).on("close", callback);
+         request(randomGif).pipe(fs.createWriteStream(__dirname + '/cache/moclon.gif')).on("close", callback);
 }

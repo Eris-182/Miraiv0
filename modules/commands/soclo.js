@@ -1,5 +1,5 @@
 module.exports.config = {
-	name: "soclon",
+	name: "soclo",
 	version: "1.0.0",
 	hasPermssion: 0,
 	credits: "Eris",
@@ -15,9 +15,11 @@ module.exports.run = async ({ api, event, Users, args }) => {
       const fs = require('fs-extra');
       let name = (await Users.getInfo(senderID)).name;
       const mentions = Object.keys(event.mentions);
+      const x = (await Users.getInfo(senderID)).gender;
+      const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
       const tag = args.join(" ");
       if (mentions == 0)
-      return api.sendMessage("Cũng đang sục cu á? Vui thế.", threadID, messageID);
+      return api.sendMessage(`Oh! ${Sex} đang chơi cái gì một mình thế, kím ai chơi cùng đi`, threadID, messageID);
       var gif = [
         "https://i.imgur.com/xxZrIV9.gif",
         "https://i.imgur.com/EHFvcF8.gif",

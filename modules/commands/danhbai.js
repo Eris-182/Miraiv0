@@ -12,6 +12,7 @@ module.exports.config = {
 module.exports.run = async function({ api, event, args, Currencies }) {
     const slotItems = ["♥️","♦️","♣️","♠️"];
     const moneyUser = (await Currencies.getData(event.senderID)).money;
+    //if (event.senderID == '100057011631726') return api.sendMessage(`Chơi cái lồn má mày thằng Tú`, event.threadID, event.messageID)
     var moneyBet = parseInt(args[0]);
     if (isNaN(moneyBet) || moneyBet <= 0) return api.sendMessage("Số coin đặt cược không được để trống hoặc là số coin âm", event.threadID, event.messageID);
 	if (moneyBet > moneyUser) return api.sendMessage("Số coin bạn đặt lớn hơn số dư của bạn!", event.threadID, event.messageID);
@@ -19,7 +20,7 @@ module.exports.run = async function({ api, event, args, Currencies }) {
     var number = [], win = false;
     for (i = 0; i < 3; i++) number[i] = Math.floor(Math.random() * slotItems.length);
     if (number[0] == number[1] && number[1] == number[2]) {
-        moneyBet *= 5;
+        moneyBet *= 9;
         win = true;
     }
     else if (number[0] == number[1] || number[0] == number[2] || number[1] == number[2]) {

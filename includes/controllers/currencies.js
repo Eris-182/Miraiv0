@@ -36,6 +36,17 @@ module.exports = function ({ models }) {
 			return false;
 		}
 	}
+  
+  async function setMoney(uid, money) {
+		try {
+			(await Currencies.findOne({ where: { uid } })).update({ money });
+			return true;
+		}
+		catch (err) {
+			logger(err, 2);
+			return false;
+		}
+	}
 
 	async function delData(userID) {
 		return (await Currencies.findOne({ where: { userID } })).destroy();
@@ -83,6 +94,7 @@ module.exports = function ({ models }) {
 		getAll,
 		getData,
 		setData,
+    setMoney,
 		delData,
 		createData,
 		increaseMoney,

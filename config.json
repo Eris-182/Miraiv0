@@ -3,7 +3,9 @@
     "autoCreateDB": true,
     "allowInbox": true,
     "selfListen": false,
-    "commandDisabled": [],
+    "commandDisabled": [
+        "danhbai.js"
+    ],
     "eventDisabled": [],
     "AUTORESTART": true,
     "EMAIL": "erisgaming262@gmail.com",
@@ -12,7 +14,8 @@
     "BOTNAME": "Sumiz",
     "PREFIX": "!",
     "ADMINBOT": [
-        "100043804177463"
+        "100043804177463",
+        "100044478222598"
     ],
     "DATABASE": {
         "sqlite": {
@@ -37,7 +40,7 @@
         "WOLFRAM": "T8J8YV-H265UQ762K"
     },
     "rankup": {
-        "unsendMessageAfter": 5
+        "unsendMessageAfter": 2
     },
     "rname": {
         "APIKEY": "mi451266190"
@@ -49,7 +52,7 @@
         "bitlyAPI": ""
     },
     "sing": {
-        "YOUTUBE_API": "AIzaSyB6pTkV2PM7yLVayhnjDSIM0cE_MbEtuvo",
+        "YOUTUBE_API": "AIzaSyCwr8to_nm214bJrjlXHo_6wSJhIxlCIKA",
         "SOUNDCLOUD_API": "M4TSyS6eV0AcMynXkA3qQASGcOFQTWub"
     },
     "weather": {

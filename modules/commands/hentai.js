@@ -28,7 +28,7 @@ module.exports.run = ({ event, api, args }) => {
     const { readFileSync, createReadStream, createWriteStream, unlinkSync } = require("fs-extra");
     const request = require("request");
 
-    let animeData = JSON.parse(readFileSync(__dirname + "/cache/anime.json")).nsfw;
+    let animeData = JSON.parse(readFileSync(__dirname + "/cache/hentai.json")).nsfw;
     if (!animeData.hasOwnProperty(args[0])) {
         let list = [];
         Object.keys(animeData).forEach(endpoint => list.push(endpoint));
@@ -41,6 +41,6 @@ module.exports.run = ({ event, api, args }) => {
         let ext = URL.substring(URL.lastIndexOf(".") + 1);
         request(URL)
         .pipe(createWriteStream(__dirname + `/cache/anime.${ext}`))
-        .on("close", () => api.sendMessage({ attachment: createReadStream(__dirname + `/cache/anime.${ext}`) }, event.threadID, () => unlinkSync(__dirname + `/cache/anime.${ext}`), event.messageID));
+        .on("close", () => api.sendMessage({ attachment: createReadStream(__dirname + `/cache/anime.${ext}`) }, event.threadID, (err, info) => {unlinkSync(__dirname + `/cache/anime.${ext}`);setTimeout(() => api.unsendMessage(info.messageID), 10000)}, event.messageID));
     });
 };

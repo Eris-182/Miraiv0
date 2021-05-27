@@ -9,9 +9,11 @@ module.exports.config = {
 	cooldowns: 5,
 };
 
-module.exports.run = async ({ api, event }) => {
-	if (event.type !== "message_reply") return api.sendMessage("❌ Bạn phải reply một audio, video, ảnh nào đó", event.threadID, event.messageID);
-	if (!event.messageReply.attachments || event.messageReply.attachments.length == 0) return api.sendMessage("❌ Bạn phải reply một audio, video, ảnh nào đó", event.threadID, event.messageID);
-	if (event.messageReply.attachments.length > 1) return api.sendMessage(`Vui lòng reply chỉ một audio, video, ảnh!`, event.threadID, event.messageID);
+module.exports.run = async ({ api, event, Users }) => {
+  const x = (await Users.getInfo(event.senderID)).gender;
+  const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
+    if (event.type !== "message_reply") return api.sendMessage(`${Sex} phải reply một audio, video, ảnh nào đó cơ`, event.threadID, event.messageID);
+	if (!event.messageReply.attachments || event.messageReply.attachments.length == 0) return api.sendMessage(`${Sex} phải reply một audio, video, ảnh nào đó cơ`, event.threadID, event.messageID);
+	if (event.messageReply.attachments.length > 1) return api.sendMessage(`${Sex} chỉ reply một audio, video, ảnh thôi nha!`, event.threadID, event.messageID);
 	return api.sendMessage(event.messageReply.attachments[0].url, event.threadID, event.messageID);
 }

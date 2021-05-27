@@ -9,14 +9,16 @@ module.exports.config = {
 	cooldowns: 5
 };
 
-module.exports.run = async ({ api, event, Users }) => {
+module.exports.run = async ({ args, api, event, Users }) => {
       const { messageID, threadID, senderID } = event;
       const request = require('request');
       const fs = require('fs-extra');
       let name = (await Users.getInfo(senderID)).name;
       const mentions = Object.keys(event.mentions);
+      const x = (await Users.getInfo(senderID)).gender;
+      const Sex = x == 2 ? "Onii chan" : x == 1 ? "Onee chan" : "";
       if (mentions == 0)
-      return api.sendMessage("Bạn cần phải tag một người nào đó!",threadID, messageID);
+      return api.sendMessage(`Oh! ${Sex} tag thêm một người vào nha`,threadID, messageID);
       return request("https://nekos.life/api/v2/img/spank",(err, response, body) => {
           let picData = JSON.parse(body);
           let getURL = picData.url;

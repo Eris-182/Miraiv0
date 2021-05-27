@@ -18,7 +18,7 @@ module.exports.event = async function({ api, event, Currencies, Users, client })
 	const { createReadStream, existsSync, mkdirSync } = require("fs-extra");
 
 	const threadData = client.threadSetting.get(threadID) || {};
-
+    if (!threadData["rankup"] || !threadData) return;
 	if (typeof threadData["rankup"] != "undefined" && threadData["rankup"] == false) return;
 	if (client.inProcess == true) return;
 
@@ -48,13 +48,28 @@ module.exports.event = async function({ api, event, Currencies, Users, client })
 	await Currencies.setData(senderID, { exp });
 	return;
 }
-module.exports.run = async function({ api, event, Threads, client }) {
-	let settings = (await Threads.getData(event.threadID)).settings;
-	if (typeof settings["rankup"] == "undefined" || settings["rankup"] == false) settings["rankup"] = true;
-	else settings["rankup"] = false;
-	
-	await Threads.setData(event.threadID, options = { settings });
-	client.threadSetting.set(event.threadID, settings);
-	
-	return api.sendMessage(`Đã ${(settings["rankup"] == true) ? "bật" : "tắt"} thành công thông báo rankup!`, event.threadID);
+module.exports.run = async function({ api, event, Threads, client, args }) {
+    if (args.length == 0) return api.sendMessage("Input không được để trống", event.threadID, event.messageID);
+    let settings = (await Threads.getData(event.threadID)).settings;
+    switch (args[0]) {
+        case "on": {
+            settings["rankup"] = true;
+            await Threads.setData(event.threadID, options = { settings });
+			client.threadSetting.set(event.threadID, settings);
+            api.sendMessage("Đã bật rankup thành công!", event.threadID);
+            break;
+        }
+        case "off": {
+            settings["rankup"] = false;
+            await Threads.setData(event.threadID, options = { settings });
+			client.threadSetting.set(event.threadID, settings);
+            api.sendMessage("Đã tắt rankup thành công!", event.threadID);
+            break;
+        }
+    
+        default: {
+            utils.throwError("rankup", event.threadID, event.messageID);
+            break;
+        }
+    }
 }

@@ -16,22 +16,24 @@ module.exports.run = async function({ api, event, args, Currencies, Users, Threa
     const { threadID, messageID } = event;
     const content = args.join(" ");
     switch(content){
-        case 'user': {
+        case 'user': {        
+            if (event.type == "messageReply") {
+                mentions = event.messageReply.senderID;
+                api.sendMessage(`Tui nè`, threadID)
+            } 
             if (content.indexOf('@') !== -1){
                 mentions = Object.keys(event.mentions)
-                }
+            }
             else mentions = event.senderID;
             let Data = (await Users.getInfo(mentions));
-            console.log(Data)
             const Money = (await Currencies.getData(mentions)).money;
             const Usex = await Data.gender;
-            console.log(Usex)
             let Sex = Usex == 2 ? "Nam" : Usex == 1 ? "Nữ": "Gay";
             let isFriend = Data.isFriend;
             let Friend = isFriend == true ? "Đã kết bạn với Bot" : isFriend == false ? "Chưa kết bạn với Bot" : "Null"
             let callback = function() {
                 api.sendMessage({
-                    body: `Tên: ${Data.name}\nUID: ${event.senderID}\nUserName: ${Data.vanity}\nGiới tính: ${Sex}\nTình trạng: ${Friend}\nUrl: ${Data.profileUrl}\nMoney: ${Money}`,
+                    body: `Tên: ${Data.name}\nUID: ${event.senderID}\nUserName: ${Data.vanity}\nGiới tính: ${Sex}\nTình trạng: ${Friend}\nUrl: ${Data.profileUrl}\nMoney: ${Money} coin`,
                     attachment: fs.createReadStream(__dirname + `/cache/Avatar.png`)
                 }, threadID, () => fs.unlinkSync(__dirname + `/cache/Avatar.png`), messageID);
             };
@@ -73,5 +75,7 @@ module.exports.run = async function({ api, event, args, Currencies, Users, Threa
             } else {
                 return request(encodeURI(`${Data.imageSrc}`)).pipe(fs.createWriteStream(__dirname+'/cache/2.png')).on('close',() => callback())}
             }
-        }
+        default:
+        api.sendMessage(`Sử dụng:\n!info user -- Để check thông tin của bản thân\n!info user @tag -- Để check thông tin người tag\n!info box -- Để check thông tin nhóm`, event.threadID, event.messageID)
+        }      
 } 
