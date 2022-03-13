@@ -3,20 +3,15 @@
     "autoCreateDB": true,
     "allowInbox": true,
     "selfListen": false,
-    "commandDisabled": [
-        "danhbai.js"
-    ],
+    "commandDisabled": [],
     "eventDisabled": [],
     "AUTORESTART": true,
-    "EMAIL": "erisgaming262@gmail.com",
-    "PASSWORD": "Kindy1997",
-    "OTPKEY": "CBO7 W5W7 XAVL O6YR MCRK EYOH QKDK CGNY",
-    "BOTNAME": "Sumiz",
+    "EMAIL": "",
+    "PASSWORD": "",
+    "OTPKEY": "",
+    "BOTNAME": "",
     "PREFIX": "!",
-    "ADMINBOT": [
-        "100043804177463",
-        "100044478222598"
-    ],
+    "ADMINBOT": [],
     "DATABASE": {
         "sqlite": {
             "storage": "data.sqlite"
